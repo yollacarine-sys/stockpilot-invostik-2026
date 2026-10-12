@@ -1,0 +1,139 @@
+{
+  "product": "StockPilot - Smart Inventory & Material Flow Optimization",
+  "model_name": "Random Forest",
+  "trained_at_utc": "2026-10-12T02:54:30+00:00",
+  "random_state": 42,
+  "operating_threshold": 0.5166866863740077,
+  "risk_tiers": {
+    "high_threshold": 0.5166866863740077,
+    "medium_threshold": 0.42918674540699003,
+    "definition": "Tinggi: p >= threshold F1-optimal (OOF dev). Sedang: p >= threshold tertinggi yang masih memberi recall OOF >= 80%. Rendah: sisanya.",
+    "calibrated": false
+  },
+  "definitions": {
+    "risk_probability": "Keluaran predict_proba kelas 1 (went_on_backorder). Tidak terkalibrasi.",
+    "predicted_class": "1 jika risk_probability >= operating_threshold.",
+    "risk_score": "Persentil peringkat risk_probability dalam batch yang dianalisis (0-100). Bersifat relatif.",
+    "risk_category": "Tinggi/Sedang/Rendah menurut risk_tiers."
+  },
+  "environment": {
+    "scikit_learn": "1.8.0",
+    "pandas": "3.0.2",
+    "numpy": "2.4.4",
+    "python": "3.12.3",
+    "xgboost": "3.4.1"
+  },
+  "data": {
+    "training_file": "train.csv",
+    "n_dev": 11432,
+    "n_holdout": 3811,
+    "split": "Memakai kolom bawaan 'Validation' (0 = dev/CV, 1 = holdout)",
+    "dev_positive_rate": 0.11896431070678797,
+    "holdout_positive_rate": 0.11886643925478876,
+    "file_sha256_prefix": {
+      "sample_Submission.csv": "c456d8d0c25a58d6",
+      "test.csv": "bed9554f33aefccc",
+      "train.csv": "0c1ff28e8c963059"
+    }
+  },
+  "features": {
+    "raw_input_columns": [
+      "national_inv",
+      "lead_time",
+      "in_transit_qty",
+      "forecast_3_month",
+      "forecast_6_month",
+      "forecast_9_month",
+      "sales_1_month",
+      "sales_3_month",
+      "sales_6_month",
+      "sales_9_month",
+      "min_bank",
+      "potential_issue",
+      "pieces_past_due",
+      "perf_6_month_avg",
+      "perf_12_month_avg",
+      "local_bo_qty",
+      "deck_risk",
+      "oe_constraint",
+      "ppap_risk",
+      "stop_auto_buy",
+      "rev_stop"
+    ],
+    "engineered_features": [
+      "national_inv",
+      "lead_time",
+      "in_transit_qty",
+      "forecast_3_month",
+      "forecast_6_month",
+      "forecast_9_month",
+      "sales_1_month",
+      "sales_3_month",
+      "sales_6_month",
+      "sales_9_month",
+      "min_bank",
+      "pieces_past_due",
+      "perf_6_month_avg",
+      "perf_12_month_avg",
+      "local_bo_qty",
+      "inv_position",
+      "demand_month",
+      "inv_cover_months",
+      "sales_trend_1v3",
+      "forecast_minus_sales_3m",
+      "inv_position_minus_forecast_3m",
+      "transit_to_forecast_ratio",
+      "potential_issue",
+      "deck_risk",
+      "oe_constraint",
+      "ppap_risk",
+      "stop_auto_buy",
+      "rev_stop",
+      "lead_time_missing",
+      "perf_6_missing",
+      "perf_12_missing",
+      "negative_inv",
+      "below_min_bank",
+      "no_demand"
+    ],
+    "excluded": {
+      "sku": "identifier",
+      "Validation": "penanda split",
+      "went_on_backorder": "target"
+    },
+    "perf_sentinel": -99
+  },
+  "selection_rule": "Model non-baseline dengan rata-rata average precision 5-fold CV tertinggi pada data dev; threshold = F1-optimal pada prediksi OOF dev.",
+  "metrics": {
+    "cv": {
+      "average_precision_mean": 0.7476203514156354,
+      "average_precision_std": 0.03811829125549363,
+      "roc_auc_mean": 0.9462263550309128,
+      "roc_auc_std": 0.009656426589385527
+    },
+    "holdout": {
+      "threshold": 0.5166866863740077,
+      "precision": 0.6634241245136187,
+      "recall": 0.7527593818984547,
+      "f1": 0.7052740434332989,
+      "accuracy": 0.9252164786145368,
+      "roc_auc": 0.9528163773506515,
+      "average_precision": 0.7407147502857065,
+      "prevalence": 0.11886643925478876,
+      "n": 3811
+    },
+    "confusion_matrix_holdout": {
+      "TN": 3185,
+      "FP": 173,
+      "FN": 112,
+      "TP": 341
+    }
+  },
+  "limitations": [
+    "Dilatih pada satu dataset historis; belum divalidasi di gudang nyata.",
+    "Probabilitas tidak terkalibrasi; gunakan sebagai skor prioritas.",
+    "Definisi kolom (satuan lead_time, makna min_bank, jendela forecast/sales) tidak terdokumentasi pada file.",
+    "Waktu pencatatan fitur terhadap label tidak diketahui; risiko leakage temporal tidak dapat dikesampingkan.",
+    "Hiperparameter tidak dituning ekstensif."
+  ]
+}
