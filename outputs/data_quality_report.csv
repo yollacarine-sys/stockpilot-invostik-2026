@@ -1,0 +1,49 @@
+# StockPilot Data Quality Report
+# baris,15243
+# kolom,24
+# sel_kosong,832
+# duplikat,0
+
+## PEMERIKSAAN
+pemeriksaan,jumlah,tingkat,catatan
+Baris duplikat penuh,0,ok,Baris identik di semua kolom.
+SKU duplikat,0,ok,Satu SKU muncul lebih dari sekali; pastikan 1 baris = 1 SKU pada snapshot yang sama.
+Kolom konstan,0,ok,Tidak ada.
+Total sel kosong,832,warning,Rincian per kolom pada tabel kolom.
+Sentinel -99 pada perf_6_month_avg,1080,info,Nilai -99 diperlakukan sebagai 'tidak ada data' (bukan kinerja sebenarnya).
+perf_6_month_avg di luar rentang 0-1 (selain sentinel),0,ok,Asumsi: skor kinerja berskala 0-1 (definisi kolom belum didokumentasikan).
+Sentinel -99 pada perf_12_month_avg,1009,info,Nilai -99 diperlakukan sebagai 'tidak ada data' (bukan kinerja sebenarnya).
+perf_12_month_avg di luar rentang 0-1 (selain sentinel),0,ok,Asumsi: skor kinerja berskala 0-1 (definisi kolom belum didokumentasikan).
+Stok nasional negatif,170,info,Dapat berarti stok kurang/backlog atau kesalahan pencatatan; perlu konfirmasi.
+sales_1_month > sales_3_month,0,ok,"Jika kolom bersifat kumulatif, nilai ini janggal; definisi jendela waktu belum terdokumentasi."
+Nilai ekstrem tinggi pada national_inv,861,info,Melebihi Q3 + 10xIQR; periksa apakah SKU bervolume sangat besar atau kesalahan entri.
+Nilai ekstrem tinggi pada forecast_3_month,1501,info,Melebihi Q3 + 10xIQR; periksa apakah SKU bervolume sangat besar atau kesalahan entri.
+Nilai ekstrem tinggi pada sales_1_month,1153,info,Melebihi Q3 + 10xIQR; periksa apakah SKU bervolume sangat besar atau kesalahan entri.
+Nilai ekstrem tinggi pada in_transit_qty,16,info,Melebihi Q3 + 10xIQR; periksa apakah SKU bervolume sangat besar atau kesalahan entri.
+
+## KOLOM
+kolom,tipe,missing,missing_%,n_unik,konstan
+sku,int64,0,0.0,15243,False
+national_inv,int64,0,0.0,1388,False
+lead_time,float64,832,5.458,26,False
+in_transit_qty,int64,0,0.0,447,False
+forecast_3_month,int64,0,0.0,788,False
+forecast_6_month,int64,0,0.0,1033,False
+forecast_9_month,int64,0,0.0,1173,False
+sales_1_month,int64,0,0.0,549,False
+sales_3_month,int64,0,0.0,920,False
+sales_6_month,int64,0,0.0,1227,False
+sales_9_month,int64,0,0.0,1455,False
+min_bank,int64,0,0.0,560,False
+potential_issue,int64,0,0.0,2,False
+pieces_past_due,int64,0,0.0,82,False
+perf_6_month_avg,float64,0,0.0,102,False
+perf_12_month_avg,float64,0,0.0,102,False
+local_bo_qty,int64,0,0.0,79,False
+deck_risk,int64,0,0.0,2,False
+oe_constraint,int64,0,0.0,2,False
+ppap_risk,int64,0,0.0,2,False
+stop_auto_buy,int64,0,0.0,2,False
+rev_stop,int64,0,0.0,2,False
+went_on_backorder,int64,0,0.0,2,False
+Validation,int64,0,0.0,2,False
